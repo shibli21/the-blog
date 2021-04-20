@@ -1,9 +1,10 @@
-import { Container, Heading } from "@chakra-ui/react";
+import { Heading } from "@chakra-ui/react";
+import Layout from "../components/layout";
 
 const Index = () => (
-  <Container bg="#e67e22">
+  <Layout>
     <Heading>The Blog .</Heading>
-  </Container>
+  </Layout>
 );
 
 export default Index;
