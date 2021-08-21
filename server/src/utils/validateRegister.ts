@@ -4,7 +4,7 @@ export const validateRegister = (input: UserInputType) => {
   if (input.username.includes("@")) {
     return [
       {
-        field: ".username",
+        field: "username",
         message: "Can't includes an @ ",
       },
     ];
