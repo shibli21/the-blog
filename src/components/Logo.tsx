@@ -7,7 +7,10 @@ interface Props extends HeadingProps {}
 const Logo: FC<Props> = ({ ...props }) => {
   return (
     <Heading {...(props as HeadingProps)}>
-      The Blog <chakra.span color="red.300">.</chakra.span>
+      The Blog{" "}
+      <chakra.span color="red.300" fontSize="6xl" lineHeight="0">
+        .
+      </chakra.span>
     </Heading>
   );
 };
