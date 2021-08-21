@@ -3,7 +3,7 @@ import Layout from "../components/layout";
 
 const Index = () => (
   <Layout>
-    <Heading>The Blog .</Heading>
+    <Heading>The Blog ..</Heading>
   </Layout>
 );
 
