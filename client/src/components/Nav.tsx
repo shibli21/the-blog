@@ -5,6 +5,7 @@ import React, { FC } from "react";
 import { useLogoutMutation, useMeQuery } from "../generated/graphql";
 import Logo from "./Logo";
 import Nextlink from "next/link";
+import { DarkModeSwitch } from "./DarkModeSwitch";
 
 interface Props {}
 
@@ -52,6 +53,7 @@ const Nav: FC<Props> = ({}) => {
       <Container maxW="container.lg">
         <Flex py={2} justifyContent="space-between">
           <Logo />
+          <DarkModeSwitch />
           {body}
         </Flex>
       </Container>

@@ -49,7 +49,7 @@ const backgroundSecondary = "#EBEBEB";
 const textPrimaryDarkMode = backgroundPrimary;
 const textSecondaryDarkMode = backgroundSecondary;
 
-const backgroundPrimaryDarkMode = "#3E3D3C";
+const backgroundPrimaryDarkMode = "#09141b";
 const backgroundSecondaryDarkMode = textSecondary;
 
 const theme = extendTheme({
