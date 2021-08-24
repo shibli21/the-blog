@@ -1,7 +1,7 @@
-import React, { FC } from "react";
 import { Container, Flex, FlexProps } from "@chakra-ui/react";
-import Nav from "./Nav";
+import React, { FC } from "react";
 import Footer from "./Footer";
+import Nav from "./Nav";
 
 /**
  * Layout which surounds every component

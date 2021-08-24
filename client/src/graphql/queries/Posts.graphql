@@ -1,0 +1,18 @@
+query Posts {
+  posts {
+    id
+    title
+    identifier
+    slug
+    body
+    user {
+      id
+      username
+      email
+      createdAt
+      updatedAt
+    }
+    createdAt
+    updatedAt
+  }
+}

@@ -31,6 +31,9 @@ const Nav: FC<Props> = ({}) => {
   } else {
     body = (
       <HStack>
+        <Button letterSpacing="wider" colorScheme="blue">
+          <Nextlink href="/create-post">create post</Nextlink>
+        </Button>
         <Button letterSpacing="wider" colorScheme="green">
           {data?.me?.username}
         </Button>
@@ -43,7 +46,7 @@ const Nav: FC<Props> = ({}) => {
             router.reload();
           }}
         >
-          Logout
+          logout
         </Button>
       </HStack>
     );

@@ -1,0 +1,3 @@
+mutation deletePost($deletePostIdentifier: String!) {
+  deletePost(identifier: $deletePostIdentifier)
+}
