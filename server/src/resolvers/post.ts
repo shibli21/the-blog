@@ -10,6 +10,7 @@ import {
     Resolver,
     UseMiddleware
 } from "type-graphql";
+import { getConnection } from "typeorm";
 import { Post } from "./../entities/post";
 import { User } from "./../entities/user";
 import { isAuth } from "./../middleware/isAuth";
@@ -22,6 +23,21 @@ class PostInputType {
 
     @Field()
     body!: string;
+}
+
+@InputType()
+class PostEditInputType {
+    @Field()
+    title!: string;
+
+    @Field()
+    body!: string;
+
+    @Field()
+    slug: string;
+
+    @Field()
+    identifier: string;
 }
 
 @InputType()
@@ -45,31 +61,43 @@ class GetPostResponse {
 @Resolver()
 export class PostResolver {
     @Query(() => [Post])
-    posts() {
-        return Post.find({
+    async posts(
+        @Ctx() { req }: MyContext
+    ) {
+        const posts = await Post.find({
             order: {
                 createdAt: "DESC",
             },
-            relations: ['user']
+            relations: ["user", "comments", "comments.user", "votes"]
+        })
+
+        const user = await User.findOne({
+            where: {
+                id: req.userId,
+            },
         });
+
+        if (user) {
+            posts.forEach((p) => p.setUserVote(user))
+        }
+
+
+        return posts;
     }
 
     @Query(() => GetPostResponse)
     async getPost(
-        @Arg("input") input: GetPostInputType
+        @Arg("input") input: GetPostInputType,
+        @Ctx() { req }: MyContext
     ): Promise<GetPostResponse> {
         const post = await Post.findOne({
             where: {
                 identifier: input.identifier,
                 slug: input.slug,
             },
-            relations: [
-                "user",
-            ],
-            order: {
-                createdAt: "DESC",
-            },
+            relations: ["user", "comments", "comments.user", "votes"],
         });
+
 
         if (!post) {
             return {
@@ -80,6 +108,16 @@ export class PostResolver {
                     },
                 ],
             };
+        }
+
+        const user = await User.findOne({
+            where: {
+                id: req.userId,
+            },
+        });
+
+        if (user) {
+            post.setUserVote(user)
         }
 
         return { post };
@@ -109,6 +147,40 @@ export class PostResolver {
             return null;
         }
         return post;
+    }
+
+
+    @Mutation(() => Post, { nullable: true })
+    async updatePost(
+        @Arg("input") input: PostEditInputType,
+        @Ctx() { req }: MyContext
+    ): Promise<Post | null> {
+
+        const postExists = await Post.findOne({
+            where: {
+                user: {
+                    id: req.userId
+                }
+            },
+            relations: ['user']
+        })
+        if (postExists) {
+            const post = await getConnection()
+                .createQueryBuilder()
+                .update(Post)
+                .set({ body: input.body, title: input.title })
+                .where('slug  = :slug and identifier = :identifier', {
+                    slug: input.slug,
+                    identifier: input.identifier,
+                })
+
+                .returning("*")
+                .execute();
+            return post.raw[0];
+        } else {
+            return null
+        }
+
     }
 
 

@@ -1,0 +1,3 @@
+mutation DeleteComment($deleteCommentIdentifier: String!) {
+  deleteComment(identifier: $deleteCommentIdentifier)
+}

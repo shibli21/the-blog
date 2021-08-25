@@ -1,0 +1,3 @@
+mutation VoteOnPost($voteOnPostInput: VoteOnPostInputType!) {
+  voteOnPost(input: $voteOnPostInput)
+}

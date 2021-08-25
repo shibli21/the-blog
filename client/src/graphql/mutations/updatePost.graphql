@@ -1,0 +1,8 @@
+mutation UpdatePost($updatePostInput: PostEditInputType!) {
+  updatePost(input: $updatePostInput) {
+    title
+    identifier
+    slug
+    body
+  }
+}

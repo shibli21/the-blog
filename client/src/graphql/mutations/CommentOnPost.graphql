@@ -1,0 +1,9 @@
+mutation CommentOnPostMutation($commentOnPostInput: CommentOnPostInputType!) {
+  commentOnPost(input: $commentOnPostInput) {
+    id
+    identifier
+    body
+    createdAt
+    updatedAt
+  }
+}

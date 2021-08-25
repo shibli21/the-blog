@@ -19,6 +19,23 @@ query post($getPostInput: GetPostInputType!) {
       }
       createdAt
       updatedAt
+      comments {
+        id
+        identifier
+        body
+        username
+        user {
+          username
+        }
+        createdAt
+        updatedAt
+      }
+      votes {
+        value
+        username
+      }
+      userVote
+      votesCount
     }
   }
 }

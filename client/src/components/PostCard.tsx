@@ -1,14 +1,9 @@
-import {
-  Box,
-  chakra,
-  Flex,
-  Image,
-  Link,
-  useColorModeValue,
-} from "@chakra-ui/react";
-import React from "react";
-import NextLink from "next/link";
+import { Box, chakra, Flex, Link, useColorModeValue } from "@chakra-ui/react";
 import { DateTime } from "luxon";
+import NextLink from "next/link";
+import React from "react";
+import { Maybe } from "../generated/graphql";
+import VoteStatus from "./VoteStatus";
 
 interface Props {
   body: string;
@@ -17,6 +12,8 @@ interface Props {
   createdAt: string;
   slug: string;
   identifier: string;
+  userVote?: Maybe<number> | undefined;
+  votesCount: number;
 }
 
 const PostCard = ({
@@ -26,6 +23,8 @@ const PostCard = ({
   username,
   identifier,
   slug,
+  userVote,
+  votesCount,
 }: Props) => {
   return (
     <Box
@@ -34,29 +33,23 @@ const PostCard = ({
       rounded="lg"
       shadow="lg"
       bg={useColorModeValue("white", "gray.800")}
-      //   maxW="2xl"
     >
       <Flex justifyContent="space-between" alignItems="center">
         <chakra.span
           fontSize="sm"
           color={useColorModeValue("gray.600", "gray.400")}
+          flex={1}
         >
           {DateTime.fromISO(
             new Date(parseInt(createdAt)).toISOString()
           ).toLocaleString(DateTime.DATETIME_MED)}
         </chakra.span>
-        <Link
-          px={3}
-          py={1}
-          bg="gray.600"
-          color="gray.100"
-          fontSize="sm"
-          fontWeight="700"
-          rounded="md"
-          _hover={{ bg: "gray.500" }}
-        >
-          Design
-        </Link>
+        <VoteStatus
+          identifier={identifier}
+          slug={slug}
+          userVote={userVote}
+          votesCount={votesCount}
+        />
       </Flex>
 
       <Box mt={2}>

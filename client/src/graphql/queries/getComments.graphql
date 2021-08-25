@@ -1,0 +1,14 @@
+query GetComments($getCommentsInput: PostIdentifier!) {
+  getComments(input: $getCommentsInput) {
+    id
+    identifier
+    body
+    username
+    user {
+      username
+      email
+    }
+    createdAt
+    updatedAt
+  }
+}

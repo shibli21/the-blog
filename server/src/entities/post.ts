@@ -1,4 +1,4 @@
-import { slugify } from "../utils/createSlug";
+import { Vote } from './Vote';
 import { Field, ObjectType } from "type-graphql";
 import {
     BaseEntity,
@@ -8,10 +8,12 @@ import {
     Entity,
     Index,
     JoinColumn,
-    ManyToOne, PrimaryGeneratedColumn,
+    ManyToOne, OneToMany, PrimaryGeneratedColumn,
     UpdateDateColumn
 } from "typeorm";
+import { slugify } from "../utils/createSlug";
 import { makeId } from "../utils/generateRandom";
+import { Comment } from './comment';
 import { User } from "./user";
 
 @Entity()
@@ -45,6 +47,9 @@ export class Post extends BaseEntity {
     @JoinColumn({ name: "username", referencedColumnName: "email" })
     user!: User;
 
+    @Field(() => [Comment])
+    @OneToMany(() => Comment, (comment) => comment.post)
+    comments: Comment[];
 
     @Field(() => String)
     @CreateDateColumn()
@@ -54,6 +59,21 @@ export class Post extends BaseEntity {
     @UpdateDateColumn()
     updatedAt!: Date;
 
+    @Field(() => [Vote])
+    @OneToMany(() => Vote, (vote) => vote.post)
+    votes!: Vote[];
+
+    @Field(() => Number, { nullable: true })
+    protected userVote: number
+    setUserVote(user: User) {
+        const index = this.votes?.findIndex((v) => v.username === user.email)
+        this.userVote = index > -1 ? this.votes[index].value : 0
+    }
+
+    @Field(() => Number)
+    get votesCount(): Number {
+        return this.votes?.reduce((prev, curr) => prev + (curr.value || 0), 0);
+    }
 
     @BeforeInsert()
     makeIdAndSlug() {

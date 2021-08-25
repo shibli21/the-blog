@@ -1,30 +1,46 @@
-import { DeleteIcon } from "@chakra-ui/icons";
+import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import {
   Box,
+  Button,
   chakra,
   Flex,
+  FormControl,
+  FormErrorMessage,
   HStack,
+  Input,
+  InputGroup,
+  InputRightElement,
   Link,
   Text,
   useColorModeValue,
+  useToast,
+  VStack,
 } from "@chakra-ui/react";
 import { DateTime } from "luxon";
 import { useRouter } from "next/router";
 import React from "react";
+import NextLink from "next/link";
+import { useForm } from "react-hook-form";
 import Layout from "../../components/layout";
+import VoteStatus from "../../components/VoteStatus";
 import {
+  GetCommentsDocument,
+  useCommentOnPostMutationMutation,
+  useDeleteCommentMutation,
   useDeletePostMutation,
+  useGetCommentsQuery,
   useMeQuery,
   usePostQuery,
 } from "../../generated/graphql";
 interface Props {}
 
-const Post = (props: Props) => {
+const Post = ({}: Props) => {
   const router = useRouter();
-  console.log("🚀 ~ file: [slug].tsx ~ line 9 ~ Post ~ router", router);
-  const { data: MeData, loading } = useMeQuery();
+  const { data: MeData } = useMeQuery();
 
   const [deletePost] = useDeletePostMutation();
+  const [deleteComment] = useDeleteCommentMutation();
+  const [commentOnPost] = useCommentOnPostMutationMutation();
 
   const slug = typeof router.query.slug === "string" ? router.query.slug : -1;
 
@@ -36,16 +52,66 @@ const Post = (props: Props) => {
       },
     },
   });
+  const { data: commentsData } = useGetCommentsQuery({
+    variables: {
+      getCommentsInput: {
+        identifier: router.query.identifier as string,
+        slug: slug as string,
+      },
+    },
+  });
+
+  const {
+    handleSubmit,
+    register,
+    reset,
+    formState: { errors },
+  } = useForm();
+  const toast = useToast();
+
+  const onSubmit = async (data: any) => {
+    if (MeData?.me?.email) {
+      await commentOnPost({
+        variables: {
+          commentOnPostInput: {
+            body: data.body,
+            identifier: router.query.identifier as string,
+            slug: slug as string,
+          },
+        },
+        refetchQueries: [
+          {
+            query: GetCommentsDocument,
+            variables: {
+              getCommentsInput: {
+                identifier: router.query.identifier as string,
+                slug: slug as string,
+              },
+            },
+          },
+        ],
+      });
+      reset();
+    } else {
+      toast({
+        title: "You can't comment on this post",
+        description: "You need to sign in first",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+        variant: "left-accent",
+        position: "bottom-right",
+      });
+      reset();
+    }
+  };
+  if (!data?.getPost.post) {
+    return <Box>No Post</Box>;
+  }
 
   return (
     <Layout>
-      <Box
-        px={8}
-        py={4}
-        rounded="lg"
-        shadow="lg"
-        bg={useColorModeValue("white", "gray.800")}
-      >
+      <Box px={8} py={4} bg={useColorModeValue("white", "gray.800")}>
         <Flex justifyContent="space-between" alignItems="center">
           <chakra.span
             fontSize="sm"
@@ -57,30 +123,31 @@ const Post = (props: Props) => {
               ).toLocaleString(DateTime.DATETIME_MED)}
           </chakra.span>
           <HStack>
-            <Link
-              px={3}
-              py={1}
-              bg="gray.600"
-              color="gray.100"
-              fontSize="sm"
-              fontWeight="700"
-              rounded="md"
-              _hover={{ bg: "gray.500" }}
-            >
-              Design
-            </Link>
+            <VoteStatus
+              identifier={data.getPost.post.identifier}
+              slug={data.getPost.post.slug}
+              userVote={data.getPost.post.userVote}
+              votesCount={data.getPost.post.votesCount}
+            />
             {MeData?.me?.email === data?.getPost.post?.user.email && (
-              <DeleteIcon
-                _hover={{ color: "red.400" }}
-                onClick={() => {
-                  deletePost({
-                    variables: {
-                      deletePostIdentifier: data?.getPost.post?.identifier!,
-                    },
-                  });
-                  router.push("/");
-                }}
-              />
+              <HStack cursor="pointer">
+                <DeleteIcon
+                  _hover={{ color: "red.400" }}
+                  onClick={() => {
+                    deletePost({
+                      variables: {
+                        deletePostIdentifier: data?.getPost.post?.identifier!,
+                      },
+                    });
+                    router.push("/");
+                  }}
+                />
+                <NextLink
+                  href={`/post/edit/${slug}?identifier=${router.query.identifier}`}
+                >
+                  <EditIcon _hover={{ color: "blue.400" }} />
+                </NextLink>
+              </HStack>
             )}
           </HStack>
         </Flex>
@@ -113,6 +180,82 @@ const Post = (props: Props) => {
             </Link>
           </Flex>
         </Flex>
+      </Box>
+      <Box>
+        <Text px={6} py={3}>
+          Comments
+        </Text>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <FormControl isInvalid={errors.body}>
+            <InputGroup size="md">
+              <Input
+                placeholder="comment"
+                pr="4.5rem"
+                id="body"
+                {...register("body", {
+                  required: "comment can not be empty",
+                  minLength: {
+                    value: 1,
+                    message: "Minimum length should be 4",
+                  },
+                })}
+              />
+              <InputRightElement width="6.5rem">
+                <Button h="1.75rem" size="sm" type="submit">
+                  comment
+                </Button>
+              </InputRightElement>
+            </InputGroup>
+            <FormErrorMessage>
+              {errors.body && errors.body.message}
+            </FormErrorMessage>
+          </FormControl>
+        </form>
+        {commentsData?.getComments.map(c => (
+          <VStack
+            alignItems="flex-start"
+            py={4}
+            px={6}
+            my={4}
+            bg={useColorModeValue("white", "gray.800")}
+          >
+            <Flex w="100%" justifyContent="space-between">
+              <Box>{c.user.username}</Box>
+              <HStack>
+                <Box>
+                  {c.createdAt &&
+                    DateTime.fromISO(
+                      new Date(parseInt(c.createdAt)).toISOString()
+                    ).toLocaleString(DateTime.DATETIME_MED)}
+                </Box>
+                {MeData?.me?.email === c.user.email && (
+                  <DeleteIcon
+                    _hover={{ color: "red.400" }}
+                    onClick={() => {
+                      deleteComment({
+                        variables: {
+                          deleteCommentIdentifier: c.identifier,
+                        },
+                        refetchQueries: [
+                          {
+                            query: GetCommentsDocument,
+                            variables: {
+                              getCommentsInput: {
+                                identifier: router.query.identifier as string,
+                                slug: slug as string,
+                              },
+                            },
+                          },
+                        ],
+                      });
+                    }}
+                  />
+                )}
+              </HStack>
+            </Flex>
+            <Box>{c.body}</Box>
+          </VStack>
+        ))}
       </Box>
     </Layout>
   );

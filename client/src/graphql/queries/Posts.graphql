@@ -12,6 +12,12 @@ query Posts {
       createdAt
       updatedAt
     }
+    votes {
+      value
+      username
+    }
+    userVote
+    votesCount
     createdAt
     updatedAt
   }
