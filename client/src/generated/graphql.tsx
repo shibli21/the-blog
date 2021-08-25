@@ -136,6 +136,11 @@ export type PostInputType = {
   body: Scalars['String'];
 };
 
+export type PostsFilterType = {
+  offset: Scalars['Float'];
+  limit: Scalars['Float'];
+};
+
 export type Query = {
   __typename?: 'Query';
   comments: Array<Comment>;
@@ -148,6 +153,11 @@ export type Query = {
 
 export type QueryGetCommentsArgs = {
   input: PostIdentifier;
+};
+
+
+export type QueryPostsArgs = {
+  input: PostsFilterType;
 };
 
 
@@ -265,7 +275,9 @@ export type PostQueryVariables = Exact<{
 
 export type PostQuery = { __typename?: 'Query', getPost: { __typename?: 'GetPostResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, post?: Maybe<{ __typename?: 'Post', title: string, id: number, identifier: string, slug: string, body: string, createdAt: string, updatedAt: string, userVote?: Maybe<number>, votesCount: number, user: { __typename?: 'User', id: number, username: string, email: string, createdAt: string, updatedAt: string }, comments: Array<{ __typename?: 'Comment', id: number, identifier: string, body: string, username: string, createdAt: string, updatedAt: string, user: { __typename?: 'User', username: string } }>, votes: Array<{ __typename?: 'Vote', value: number, username: string }> }> } };
 
-export type PostsQueryVariables = Exact<{ [key: string]: never; }>;
+export type PostsQueryVariables = Exact<{
+  postsInput: PostsFilterType;
+}>;
 
 
 export type PostsQuery = { __typename?: 'Query', posts: Array<{ __typename?: 'Post', id: number, title: string, identifier: string, slug: string, body: string, userVote?: Maybe<number>, votesCount: number, createdAt: string, updatedAt: string, user: { __typename?: 'User', id: number, username: string, email: string, createdAt: string, updatedAt: string }, votes: Array<{ __typename?: 'Vote', value: number, username: string }> }> };
@@ -717,8 +729,8 @@ export type PostQueryHookResult = ReturnType<typeof usePostQuery>;
 export type PostLazyQueryHookResult = ReturnType<typeof usePostLazyQuery>;
 export type PostQueryResult = Apollo.QueryResult<PostQuery, PostQueryVariables>;
 export const PostsDocument = gql`
-    query Posts {
-  posts {
+    query Posts($postsInput: PostsFilterType!) {
+  posts(input: $postsInput) {
     id
     title
     identifier
@@ -755,10 +767,11 @@ export const PostsDocument = gql`
  * @example
  * const { data, loading, error } = usePostsQuery({
  *   variables: {
+ *      postsInput: // value for 'postsInput'
  *   },
  * });
  */
-export function usePostsQuery(baseOptions?: Apollo.QueryHookOptions<PostsQuery, PostsQueryVariables>) {
+export function usePostsQuery(baseOptions: Apollo.QueryHookOptions<PostsQuery, PostsQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<PostsQuery, PostsQueryVariables>(PostsDocument, options);
       }

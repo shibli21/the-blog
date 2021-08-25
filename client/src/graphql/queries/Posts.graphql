@@ -1,5 +1,5 @@
-query Posts {
-  posts {
+query Posts($postsInput: PostsFilterType!) {
+  posts(input: $postsInput) {
     id
     title
     identifier

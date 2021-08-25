@@ -1,10 +1,17 @@
-import { Stack } from "@chakra-ui/react";
+import { Button, Stack } from "@chakra-ui/react";
 import Layout from "../components/layout";
 import PostCard from "../components/PostCard";
-import { usePostsQuery } from "../generated/graphql";
+import { PostsDocument, usePostsQuery } from "../generated/graphql";
 
 const Index = () => {
-  const { data } = usePostsQuery();
+  const { data, fetchMore, loading } = usePostsQuery({
+    variables: {
+      postsInput: {
+        offset: 0,
+        limit: 2,
+      },
+    },
+  });
 
   return (
     <Layout>
@@ -22,6 +29,21 @@ const Index = () => {
             votesCount={p.votesCount}
           />
         ))}
+        <Button
+          onClick={() =>
+            fetchMore({
+              variables: {
+                postsInput: {
+                  offset: data?.posts.length,
+                  limit: 2,
+                },
+              },
+            })
+          }
+          isLoading={loading}
+        >
+          Fetch More
+        </Button>
       </Stack>
     </Layout>
   );

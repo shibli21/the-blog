@@ -17,6 +17,14 @@ import { isAuth } from "./../middleware/isAuth";
 import { FieldError } from "./../utils/FieldErrorsType";
 
 @InputType()
+class PostsFilterType {
+    @Field()
+    offset: number;
+
+    @Field()
+    limit: number;
+}
+@InputType()
 class PostInputType {
     @Field()
     title!: string;
@@ -62,12 +70,15 @@ class GetPostResponse {
 export class PostResolver {
     @Query(() => [Post])
     async posts(
+        @Arg("input") input: PostsFilterType,
         @Ctx() { req }: MyContext
     ) {
         const posts = await Post.find({
             order: {
                 createdAt: "DESC",
             },
+            take: input.limit,
+            skip: input.offset,
             relations: ["user", "comments", "comments.user", "votes"]
         })
 

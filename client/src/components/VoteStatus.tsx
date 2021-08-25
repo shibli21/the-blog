@@ -3,6 +3,7 @@ import React from "react";
 import { AiFillHeart } from "react-icons/ai";
 import {
   Maybe,
+  PostDocument,
   PostsDocument,
   useMeQuery,
   useVoteOnPostMutation,
@@ -44,7 +45,13 @@ const VoteStatus = ({ identifier, slug, userVote, votesCount }: Props) => {
               },
               refetchQueries: [
                 {
-                  query: PostsDocument,
+                  query: PostDocument,
+                  variables: {
+                    getPostInput: {
+                      identifier,
+                      slug,
+                    },
+                  },
                 },
               ],
             });
