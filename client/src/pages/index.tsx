@@ -1,4 +1,4 @@
-import { Button, Stack } from "@chakra-ui/react";
+import { Box, Button, Flex, Stack } from "@chakra-ui/react";
 import Layout from "../components/layout";
 import PostCard from "../components/PostCard";
 import { PostsDocument, usePostsQuery } from "../generated/graphql";
@@ -23,27 +23,34 @@ const Index = () => {
             key={p.identifier}
             body={p.body}
             title={p.title}
+            userEmail={p.user.email}
             username={p.user.username}
             createdAt={p.createdAt}
             userVote={p.userVote}
             votesCount={p.votesCount}
+            comments={p.comments}
           />
         ))}
-        <Button
-          onClick={() =>
-            fetchMore({
-              variables: {
-                postsInput: {
-                  offset: data?.posts.length,
-                  limit: 2,
+        <Flex justifyContent="flex-end">
+          <Button
+            w="150px"
+            variant="solid"
+            colorScheme="purple"
+            onClick={() =>
+              fetchMore({
+                variables: {
+                  postsInput: {
+                    offset: data?.posts.length,
+                    limit: 2,
+                  },
                 },
-              },
-            })
-          }
-          isLoading={loading}
-        >
-          Fetch More
-        </Button>
+              })
+            }
+            isLoading={loading}
+          >
+            More post
+          </Button>
+        </Flex>
       </Stack>
     </Layout>
   );

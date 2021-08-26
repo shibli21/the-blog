@@ -1,19 +1,35 @@
-import { Box, chakra, Flex, Link, useColorModeValue } from "@chakra-ui/react";
+import { ArrowForwardIcon } from "@chakra-ui/icons";
+import {
+  Box,
+  chakra,
+  Flex,
+  HStack,
+  Link,
+  Stack,
+  Text,
+  useColorModeValue,
+} from "@chakra-ui/react";
 import { DateTime } from "luxon";
 import NextLink from "next/link";
 import React from "react";
 import { Maybe } from "../generated/graphql";
+import { BiCommentDetail } from "react-icons/bi";
 import VoteStatus from "./VoteStatus";
+import EditDeleteButtons from "./EditDeleteButtons";
 
 interface Props {
   body: string;
   title: string;
   username: string;
   createdAt: string;
+  userEmail: string;
   slug: string;
   identifier: string;
   userVote?: Maybe<number> | undefined;
   votesCount: number;
+  comments: {
+    body: string;
+  }[];
 }
 
 const PostCard = ({
@@ -21,35 +37,44 @@ const PostCard = ({
   createdAt,
   title,
   username,
+  userEmail,
   identifier,
   slug,
   userVote,
   votesCount,
+  comments,
 }: Props) => {
   return (
-    <Box
-      px={8}
-      py={4}
-      rounded="lg"
-      shadow="lg"
-      bg={useColorModeValue("white", "gray.800")}
-    >
-      <Flex justifyContent="space-between" alignItems="center">
-        <chakra.span
-          fontSize="sm"
-          color={useColorModeValue("gray.600", "gray.400")}
-          flex={1}
-        >
-          {DateTime.fromISO(
-            new Date(parseInt(createdAt)).toISOString()
-          ).toLocaleString(DateTime.DATETIME_MED)}
-        </chakra.span>
-        <VoteStatus
-          identifier={identifier}
-          slug={slug}
-          userVote={userVote}
-          votesCount={votesCount}
-        />
+    <Box border="1px solid" p={5} bg={useColorModeValue("white", "gray.800")}>
+      <Flex justifyContent="space-between" alignItems="flex-start">
+        <HStack alignItems="center">
+          <Box
+            bgGradient="linear(to-l, #7928CA,#FF0080)"
+            w="40px"
+            h="40px"
+            borderRadius="50%"
+          />
+          <Box>
+            <Text bgGradient="linear(to-l, #7928CA,#FF0080)" bgClip="text">
+              {username}
+            </Text>
+            <chakra.span fontSize="sm" flex={1}>
+              {DateTime.fromISO(
+                new Date(parseInt(createdAt)).toISOString()
+              ).toLocaleString(DateTime.DATE_FULL)}
+            </chakra.span>
+          </Box>
+        </HStack>
+        <HStack>
+          <BiCommentDetail />
+          <Text>{comments.length}</Text>
+          <VoteStatus
+            identifier={identifier}
+            slug={slug}
+            userVote={userVote}
+            votesCount={votesCount}
+          />
+        </HStack>
       </Flex>
 
       <Box mt={2}>
@@ -72,32 +97,26 @@ const PostCard = ({
       </Box>
 
       <Flex justifyContent="space-between" alignItems="center" mt={4}>
-        <Link
-          color={useColorModeValue("brand.600", "brand.400")}
-          _hover={{ textDecor: "underline" }}
-        >
-          Read more
-        </Link>
+        <NextLink href={`/post/${slug}?identifier=${identifier}`}>
+          <HStack cursor="pointer">
+            <Link
+              _hover={{
+                bgGradient: "linear(to-l, #7928CA,#FF0080)",
+                bgClip: "text",
+              }}
+              textDecor="none"
+            >
+              continue reading
+            </Link>
 
-        <Flex alignItems="center">
-          {/* <Box
-            mx={4}
-            w={7}
-            h={7}
-            borderRadius="50%"
-            background="red.400"
-            textAlign="center"
-          >
-            K
-          </Box> */}
-          <Link
-            color={useColorModeValue("gray.700", "gray.200")}
-            fontWeight="700"
-            cursor="pointer"
-          >
-            {username}
-          </Link>
-        </Flex>
+            <ArrowForwardIcon />
+          </HStack>
+        </NextLink>
+        <EditDeleteButtons
+          identifier={identifier}
+          slug={slug}
+          userEmail={userEmail}
+        />
       </Flex>
     </Box>
   );

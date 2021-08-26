@@ -5,6 +5,7 @@ import {
   FormErrorMessage,
   FormLabel,
   Heading,
+  HStack,
   Input,
   Stack,
   Text,
@@ -16,6 +17,7 @@ import { useForm } from "react-hook-form";
 import { Card } from "../components/Card";
 import { Link } from "../components/Link";
 import Logo from "../components/Logo";
+import NextLink from "next/link";
 import { MeDocument, useLoginMutation } from "../generated/graphql";
 
 interface Props {}
@@ -73,16 +75,19 @@ const login = (props: Props) => {
         <Heading textAlign="center" size="xl" fontWeight="extrabold">
           Sign in to your account
         </Heading>
-        <Text mt="4" mb="8" align="center" maxW="md" fontWeight="medium">
+        <HStack mt="4" mb="8" justifyContent="center" fontWeight="medium">
           <Text as="span">Don&apos;t have an account?</Text>
-          <Link href="#"> Create an account</Link>
-        </Text>
-        <Card>
+          <NextLink href="/register">
+            <Link> Create an account</Link>
+          </NextLink>
+        </HStack>
+        <Card border="1px solid">
           <form onSubmit={handleSubmit(onSubmit)}>
             <Stack spacing="6">
               <FormControl isInvalid={errors.name}>
-                <FormLabel htmlFor="name">Email address</FormLabel>
+                <FormLabel htmlFor="name">Email </FormLabel>
                 <Input
+                  borderRadius={0}
                   id="email"
                   placeholder="email"
                   {...register("email", {
@@ -100,6 +105,7 @@ const login = (props: Props) => {
               <FormControl isInvalid={errors.name}>
                 <FormLabel htmlFor="name">Password</FormLabel>
                 <Input
+                  borderRadius={0}
                   id="password"
                   type="password"
                   placeholder="password"

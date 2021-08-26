@@ -5,22 +5,20 @@ import {
   FormErrorMessage,
   FormLabel,
   Heading,
+  HStack,
   Input,
   Stack,
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
+import NextLink from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { Card } from "../components/Card";
 import { Link } from "../components/Link";
 import Logo from "../components/Logo";
-import {
-  MeDocument,
-  useLoginMutation,
-  useRegisterMutation,
-} from "../generated/graphql";
+import { MeDocument, useRegisterMutation } from "../generated/graphql";
 
 interface Props {}
 
@@ -80,16 +78,19 @@ const Register = (props: Props) => {
         <Heading textAlign="center" size="xl" fontWeight="extrabold">
           Sign up to your account
         </Heading>
-        <Text mt="4" mb="8" align="center" maxW="md" fontWeight="medium">
+        <HStack mt="4" mb="8" justifyContent="center" fontWeight="medium">
           <Text as="span">Already have an account?</Text>
-          <Link href="#"> Sign in</Link>
-        </Text>
-        <Card>
+          <NextLink href="/login">
+            <Link href="#"> Sign in</Link>
+          </NextLink>
+        </HStack>
+        <Card border="1px solid">
           <form onSubmit={handleSubmit(onSubmit)}>
             <Stack spacing="6">
               <FormControl isInvalid={errors.username}>
                 <FormLabel htmlFor="username">Name</FormLabel>
                 <Input
+                  borderRadius="0"
                   id="username"
                   placeholder="username"
                   {...register("username", {
@@ -105,8 +106,9 @@ const Register = (props: Props) => {
                 </FormErrorMessage>
               </FormControl>
               <FormControl isInvalid={errors.email}>
-                <FormLabel htmlFor="email">Email address</FormLabel>
+                <FormLabel htmlFor="email">Email</FormLabel>
                 <Input
+                  borderRadius="0"
                   id="email"
                   placeholder="email"
                   {...register("email", {
@@ -124,6 +126,7 @@ const Register = (props: Props) => {
               <FormControl isInvalid={errors.password}>
                 <FormLabel htmlFor="name">Password</FormLabel>
                 <Input
+                  borderRadius="0"
                   id="password"
                   type="password"
                   placeholder="password"

@@ -1,16 +1,15 @@
-import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
+import { DeleteIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
   chakra,
+  Divider,
   Flex,
   FormControl,
   FormErrorMessage,
   HStack,
   Input,
   InputGroup,
-  InputRightElement,
-  Link,
   Text,
   useColorModeValue,
   useToast,
@@ -19,15 +18,15 @@ import {
 import { DateTime } from "luxon";
 import { useRouter } from "next/router";
 import React from "react";
-import NextLink from "next/link";
 import { useForm } from "react-hook-form";
+import { DividerWithText } from "../../components/DividerWithText";
+import EditDeleteButtons from "../../components/EditDeleteButtons";
 import Layout from "../../components/layout";
 import VoteStatus from "../../components/VoteStatus";
 import {
   GetCommentsDocument,
   useCommentOnPostMutationMutation,
   useDeleteCommentMutation,
-  useDeletePostMutation,
   useGetCommentsQuery,
   useMeQuery,
   usePostQuery,
@@ -38,7 +37,6 @@ const Post = ({}: Props) => {
   const router = useRouter();
   const { data: MeData } = useMeQuery();
 
-  const [deletePost] = useDeletePostMutation();
   const [deleteComment] = useDeleteCommentMutation();
   const [commentOnPost] = useCommentOnPostMutationMutation();
 
@@ -111,17 +109,30 @@ const Post = ({}: Props) => {
 
   return (
     <Layout>
-      <Box px={8} py={4} bg={useColorModeValue("white", "gray.800")}>
-        <Flex justifyContent="space-between" alignItems="center">
-          <chakra.span
-            fontSize="sm"
-            color={useColorModeValue("gray.600", "gray.400")}
-          >
-            {data?.getPost.post?.createdAt &&
-              DateTime.fromISO(
-                new Date(parseInt(data?.getPost.post?.createdAt)).toISOString()
-              ).toLocaleString(DateTime.DATETIME_MED)}
-          </chakra.span>
+      <Box border="1px solid" p={5} bg={useColorModeValue("white", "gray.800")}>
+        <Flex justifyContent="space-between" alignItems="flex-start">
+          <HStack alignItems="center">
+            <Box
+              bgGradient="linear(to-l, #7928CA,#FF0080)"
+              w="40px"
+              h="40px"
+              borderRadius="50%"
+            />
+            <Box>
+              <Text bgGradient="linear(to-l, #7928CA,#FF0080)" bgClip="text">
+                {data?.getPost.post?.user.username}
+              </Text>
+              <chakra.span fontSize="sm" flex={1}>
+                {data?.getPost.post?.createdAt &&
+                  DateTime.fromISO(
+                    new Date(
+                      parseInt(data?.getPost.post?.createdAt)
+                    ).toISOString()
+                  ).toLocaleString(DateTime.DATETIME_MED)}
+              </chakra.span>
+            </Box>
+          </HStack>
+
           <HStack>
             <VoteStatus
               identifier={data.getPost.post.identifier}
@@ -129,26 +140,11 @@ const Post = ({}: Props) => {
               userVote={data.getPost.post.userVote}
               votesCount={data.getPost.post.votesCount}
             />
-            {MeData?.me?.email === data?.getPost.post?.user.email && (
-              <HStack cursor="pointer">
-                <DeleteIcon
-                  _hover={{ color: "red.400" }}
-                  onClick={() => {
-                    deletePost({
-                      variables: {
-                        deletePostIdentifier: data?.getPost.post?.identifier!,
-                      },
-                    });
-                    router.push("/");
-                  }}
-                />
-                <NextLink
-                  href={`/post/edit/${slug}?identifier=${router.query.identifier}`}
-                >
-                  <EditIcon _hover={{ color: "blue.400" }} />
-                </NextLink>
-              </HStack>
-            )}
+            <EditDeleteButtons
+              identifier={data.getPost.post.identifier}
+              slug={data.getPost.post.slug}
+              userEmail={data.getPost.post.user.email}
+            />
           </HStack>
         </Flex>
 
@@ -164,72 +160,59 @@ const Post = ({}: Props) => {
           >
             {data?.getPost.post?.title}
           </Text>
-          <chakra.p mt={2} color={useColorModeValue("gray.600", "gray.300")}>
+          <chakra.p
+            mt={2}
+            color={useColorModeValue("gray.600", "gray.300")}
+            textAlign="justify"
+          >
             {data?.getPost.post?.body}
           </chakra.p>
         </Box>
-
-        <Flex justifyContent="space-between" alignItems="center" mt={4}>
-          <Flex alignItems="center">
-            <Link
-              color={useColorModeValue("gray.700", "gray.200")}
-              fontWeight="700"
-              cursor="pointer"
-            >
-              {data?.getPost.post?.user.username}
-            </Link>
-          </Flex>
-        </Flex>
       </Box>
-      <Box>
-        <Text px={6} py={3}>
-          Comments
+      <DividerWithText>
+        <Text px={5} py={3}>
+          comments
         </Text>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <FormControl isInvalid={errors.body}>
-            <InputGroup size="md">
-              <Input
-                placeholder="comment"
-                pr="4.5rem"
-                id="body"
-                {...register("body", {
-                  required: "comment can not be empty",
-                  minLength: {
-                    value: 1,
-                    message: "Minimum length should be 4",
-                  },
-                })}
-              />
-              <InputRightElement width="6.5rem">
-                <Button h="1.75rem" size="sm" type="submit">
-                  comment
-                </Button>
-              </InputRightElement>
-            </InputGroup>
-            <FormErrorMessage>
-              {errors.body && errors.body.message}
-            </FormErrorMessage>
-          </FormControl>
-        </form>
+      </DividerWithText>
+      <Box p={5} border="1px solid">
+        <chakra.form onSubmit={handleSubmit(onSubmit)} mb={4}>
+          <HStack alignItems="flex-start">
+            <FormControl isInvalid={errors.body}>
+              <InputGroup size="md">
+                <Input
+                  borderRadius="0"
+                  placeholder="comment"
+                  pr="4.5rem"
+                  id="body"
+                  {...register("body", {
+                    required: "comment can not be empty",
+                    minLength: {
+                      value: 1,
+                      message: "Minimum length should be 4",
+                    },
+                  })}
+                />
+              </InputGroup>
+              <FormErrorMessage>
+                {errors.body && errors.body.message}
+              </FormErrorMessage>
+            </FormControl>
+            <Button type="submit" variant="solid" colorScheme="green">
+              comment
+            </Button>
+          </HStack>
+        </chakra.form>
         {commentsData?.getComments.map(c => (
-          <VStack
-            alignItems="flex-start"
-            py={4}
-            px={6}
-            my={4}
-            bg={useColorModeValue("white", "gray.800")}
-          >
+          <VStack alignItems="flex-start" py={2}>
+            <Divider mb={2} />
             <Flex w="100%" justifyContent="space-between">
-              <Box>{c.user.username}</Box>
-              <HStack>
-                <Box>
-                  {c.createdAt &&
-                    DateTime.fromISO(
-                      new Date(parseInt(c.createdAt)).toISOString()
-                    ).toLocaleString(DateTime.DATETIME_MED)}
-                </Box>
+              <Box bgGradient="linear(to-l, #7928CA,#FF0080)" bgClip="text">
+                {c.user.username}
+              </Box>
+              <HStack alignItems="flex-start">
                 {MeData?.me?.email === c.user.email && (
                   <DeleteIcon
+                    cursor="pointer"
                     _hover={{ color: "red.400" }}
                     onClick={() => {
                       deleteComment({
@@ -251,6 +234,12 @@ const Post = ({}: Props) => {
                     }}
                   />
                 )}
+                <Box>
+                  {c.createdAt &&
+                    DateTime.fromISO(
+                      new Date(parseInt(c.createdAt)).toISOString()
+                    ).toLocaleString(DateTime.TIME_SIMPLE)}
+                </Box>
               </HStack>
             </Flex>
             <Box>{c.body}</Box>

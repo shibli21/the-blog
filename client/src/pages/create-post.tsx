@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Flex,
   FormControl,
   FormErrorMessage,
   FormLabel,
@@ -10,11 +11,13 @@ import {
   Text,
   Textarea,
   useColorModeValue,
+  VStack,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { Card } from "../components/Card";
+import { DividerWithText } from "../components/DividerWithText";
 import Layout from "../components/layout";
 import { useCreatePostMutation } from "../generated/graphql";
 
@@ -55,19 +58,20 @@ const CreatePost = (props: Props) => {
         py="12"
         px={{ base: "4", lg: "8" }}
       >
-        <Box maxW="md" mx="auto">
-          <Heading textAlign="center" size="xl" fontWeight="extrabold" mb={10}>
-            Create a post
-          </Heading>
+        <Box>
+          <DividerWithText my={10}>
+            <Text fontSize="20px">Write a new post</Text>
+          </DividerWithText>
 
-          <Card>
+          <Card border="1px solid" p={5}>
             <form onSubmit={handleSubmit(onSubmit)}>
               <Stack spacing="6">
                 <FormControl isInvalid={errors.title}>
-                  <FormLabel htmlFor="title">post title</FormLabel>
+                  <FormLabel htmlFor="title">Title</FormLabel>
                   <Input
+                    borderRadius={0}
                     id="title"
-                    placeholder="title"
+                    placeholder="Your post title"
                     {...register("title", {
                       required: "Title is required",
                       minLength: {
@@ -80,24 +84,20 @@ const CreatePost = (props: Props) => {
                     {errors.title && errors.title.message}
                   </FormErrorMessage>
                 </FormControl>
-                <Box>
-                  <Text>Post Body</Text>
+                <VStack alignItems="self-start">
+                  <Text>Body</Text>
                   <Textarea
-                    placeholder="Here is a sample placeholder"
+                    borderRadius={0}
+                    placeholder="Your post content ..."
                     id="body"
                     {...register("body")}
                   />
-                </Box>
-
-                <Button
-                  type="submit"
-                  colorScheme="blue"
-                  size="lg"
-                  fontSize="md"
-                  isLoading={loading}
-                >
-                  create post
-                </Button>
+                </VStack>
+                <Flex justifyContent="flex-end" mt={4}>
+                  <Button type="submit" colorScheme="blue" fontSize="md">
+                    create post
+                  </Button>
+                </Flex>
               </Stack>
             </form>
           </Card>

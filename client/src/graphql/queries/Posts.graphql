@@ -20,5 +20,8 @@ query Posts($postsInput: PostsFilterType!) {
     votesCount
     createdAt
     updatedAt
+    comments {
+      body
+    }
   }
 }

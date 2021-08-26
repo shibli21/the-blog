@@ -280,7 +280,7 @@ export type PostsQueryVariables = Exact<{
 }>;
 
 
-export type PostsQuery = { __typename?: 'Query', posts: Array<{ __typename?: 'Post', id: number, title: string, identifier: string, slug: string, body: string, userVote?: Maybe<number>, votesCount: number, createdAt: string, updatedAt: string, user: { __typename?: 'User', id: number, username: string, email: string, createdAt: string, updatedAt: string }, votes: Array<{ __typename?: 'Vote', value: number, username: string }> }> };
+export type PostsQuery = { __typename?: 'Query', posts: Array<{ __typename?: 'Post', id: number, title: string, identifier: string, slug: string, body: string, userVote?: Maybe<number>, votesCount: number, createdAt: string, updatedAt: string, user: { __typename?: 'User', id: number, username: string, email: string, createdAt: string, updatedAt: string }, votes: Array<{ __typename?: 'Vote', value: number, username: string }>, comments: Array<{ __typename?: 'Comment', body: string }> }> };
 
 export type GetCommentsQueryVariables = Exact<{
   getCommentsInput: PostIdentifier;
@@ -751,6 +751,9 @@ export const PostsDocument = gql`
     votesCount
     createdAt
     updatedAt
+    comments {
+      body
+    }
   }
 }
     `;

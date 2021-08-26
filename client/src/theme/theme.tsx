@@ -53,13 +53,32 @@ const backgroundPrimaryDarkMode = "#09141b";
 const backgroundSecondaryDarkMode = textSecondary;
 
 const theme = extendTheme({
+  components: {
+    Button: {
+      baseStyle: {
+        borderRadius: 0,
+      },
+      variants: {
+        outline: () => ({
+          _hover: { textDecoration: "none" },
+        }),
+      },
+    },
+  },
   styles: {
     global: props => ({
       body: {
         fontWeight: 500,
         color: mode(textPrimary, textPrimaryDarkMode)(props),
         bg: mode(backgroundPrimary, backgroundPrimaryDarkMode)(props),
-        lineHeight: "base",
+        lineHeight: "1.2",
+      },
+      input: {
+        boxShadow: "none",
+        "&:focus": {
+          border: "black",
+          boxShadow: "none",
+        },
       },
     }),
   },
@@ -84,7 +103,7 @@ const theme = extendTheme({
   },
   fonts: {
     heading: "Nexa Bold",
-    body: "Montserrat",
+    body: "Poppins",
   },
   breakpoints,
 });

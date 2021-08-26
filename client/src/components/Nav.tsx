@@ -1,11 +1,11 @@
 import { Button } from "@chakra-ui/button";
 import { Box, Container, Flex, HStack } from "@chakra-ui/layout";
+import Nextlink from "next/link";
 import { useRouter } from "next/router";
 import React, { FC } from "react";
 import { useLogoutMutation, useMeQuery } from "../generated/graphql";
-import Logo from "./Logo";
-import Nextlink from "next/link";
 import { DarkModeSwitch } from "./DarkModeSwitch";
+import Logo from "./Logo";
 
 interface Props {}
 
@@ -31,7 +31,7 @@ const Nav: FC<Props> = ({}) => {
   } else {
     body = (
       <HStack>
-        <Button letterSpacing="wider" colorScheme="blue">
+        <Button letterSpacing="wider" colorScheme="purple">
           <Nextlink href="/create-post">create post</Nextlink>
         </Button>
         <Button letterSpacing="wider" colorScheme="green">
@@ -54,7 +54,7 @@ const Nav: FC<Props> = ({}) => {
   return (
     <Box>
       <Container maxW="container.lg">
-        <Flex py={2} justifyContent="space-between">
+        <Flex py={2} justifyContent="space-between" flexWrap="wrap">
           <Logo />
           <DarkModeSwitch />
           {body}
