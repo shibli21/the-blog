@@ -13,17 +13,7 @@ import { MyContext } from "./types/MyContext";
 config();
 
 const main = async () => {
-  await createConnection({
-    type: "postgres",
-    host: "localhost",
-    port: 5432,
-    password: "root",
-    username: "postgres",
-    database: "the blog",
-    synchronize: true,
-    logging: true,
-    entities: ["src/entities/*.ts"],
-  });
+  await createConnection();
 
   const app = express();
 
