@@ -34,8 +34,11 @@ const Nav: FC<Props> = ({}) => {
         <Button letterSpacing="wider" colorScheme="purple">
           <Nextlink href="/create-post">create post</Nextlink>
         </Button>
+
         <Button letterSpacing="wider" colorScheme="green">
-          {data?.me?.username}
+          <Nextlink href={`/profile/${data.me.username}`}>
+            {data?.me?.username}
+          </Nextlink>
         </Button>
         <Button
           letterSpacing="wider"
@@ -43,7 +46,7 @@ const Nav: FC<Props> = ({}) => {
           colorScheme="red"
           onClick={async () => {
             await logout();
-            router.reload();
+            router.push("/");
           }}
         >
           logout

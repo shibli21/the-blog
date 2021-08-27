@@ -96,6 +96,40 @@ export class PostResolver {
         return posts;
     }
 
+    @UseMiddleware(isAuth)
+    @Query(() => [Post])
+    async userPosts(
+        @Arg("input") input: PostsFilterType,
+        @Ctx() { req }: MyContext
+    ) {
+
+        const user = await User.findOne({
+            where: {
+                id: req.userId,
+            },
+        });
+
+        const posts = await Post.find({
+            where: {
+                user: user
+            },
+            order: {
+                createdAt: "DESC",
+            },
+            take: input.limit,
+            skip: input.offset,
+            relations: ["user", "comments", "comments.user", "votes"]
+        })
+
+
+
+        if (user) {
+            posts.forEach((p) => p.setUserVote(user))
+        }
+
+        return posts;
+    }
+
     @Query(() => GetPostResponse)
     async getPost(
         @Arg("input") input: GetPostInputType,

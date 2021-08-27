@@ -146,6 +146,7 @@ export type Query = {
   comments: Array<Comment>;
   getComments: Array<Comment>;
   posts: Array<Post>;
+  userPosts: Array<Post>;
   getPost: GetPostResponse;
   me?: Maybe<User>;
 };
@@ -157,6 +158,11 @@ export type QueryGetCommentsArgs = {
 
 
 export type QueryPostsArgs = {
+  input: PostsFilterType;
+};
+
+
+export type QueryUserPostsArgs = {
   input: PostsFilterType;
 };
 
@@ -288,6 +294,13 @@ export type GetCommentsQueryVariables = Exact<{
 
 
 export type GetCommentsQuery = { __typename?: 'Query', getComments: Array<{ __typename?: 'Comment', id: number, identifier: string, body: string, username: string, createdAt: string, updatedAt: string, user: { __typename?: 'User', username: string, email: string } }> };
+
+export type UserPostsQueryVariables = Exact<{
+  userPostsInput: PostsFilterType;
+}>;
+
+
+export type UserPostsQuery = { __typename?: 'Query', userPosts: Array<{ __typename?: 'Post', id: number, title: string, identifier: string, slug: string, body: string, createdAt: string, updatedAt: string, userVote?: Maybe<number>, votesCount: number, comments: Array<{ __typename?: 'Comment', body: string }>, user: { __typename?: 'User', id: number, username: string, email: string, createdAt: string, updatedAt: string }, votes: Array<{ __typename?: 'Vote', value: number, username: string }> }> };
 
 
 export const CommentOnPostMutationDocument = gql`
@@ -829,3 +842,60 @@ export function useGetCommentsLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type GetCommentsQueryHookResult = ReturnType<typeof useGetCommentsQuery>;
 export type GetCommentsLazyQueryHookResult = ReturnType<typeof useGetCommentsLazyQuery>;
 export type GetCommentsQueryResult = Apollo.QueryResult<GetCommentsQuery, GetCommentsQueryVariables>;
+export const UserPostsDocument = gql`
+    query UserPosts($userPostsInput: PostsFilterType!) {
+  userPosts(input: $userPostsInput) {
+    id
+    title
+    identifier
+    slug
+    body
+    comments {
+      body
+    }
+    user {
+      id
+      username
+      email
+      createdAt
+      updatedAt
+    }
+    createdAt
+    updatedAt
+    userVote
+    votesCount
+    votes {
+      value
+      username
+    }
+  }
+}
+    `;
+
+/**
+ * __useUserPostsQuery__
+ *
+ * To run a query within a React component, call `useUserPostsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserPostsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserPostsQuery({
+ *   variables: {
+ *      userPostsInput: // value for 'userPostsInput'
+ *   },
+ * });
+ */
+export function useUserPostsQuery(baseOptions: Apollo.QueryHookOptions<UserPostsQuery, UserPostsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserPostsQuery, UserPostsQueryVariables>(UserPostsDocument, options);
+      }
+export function useUserPostsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserPostsQuery, UserPostsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserPostsQuery, UserPostsQueryVariables>(UserPostsDocument, options);
+        }
+export type UserPostsQueryHookResult = ReturnType<typeof useUserPostsQuery>;
+export type UserPostsLazyQueryHookResult = ReturnType<typeof useUserPostsLazyQuery>;
+export type UserPostsQueryResult = Apollo.QueryResult<UserPostsQuery, UserPostsQueryVariables>;

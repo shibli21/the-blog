@@ -1,0 +1,27 @@
+query UserPosts($userPostsInput: PostsFilterType!) {
+  userPosts(input: $userPostsInput) {
+    id
+    title
+    identifier
+    slug
+    body
+    comments {
+      body
+    }
+    user {
+      id
+      username
+      email
+      createdAt
+      updatedAt
+    }
+    createdAt
+    updatedAt
+    userVote
+    votesCount
+    votes {
+      value
+      username
+    }
+  }
+}

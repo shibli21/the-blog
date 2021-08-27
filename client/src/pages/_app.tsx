@@ -20,6 +20,13 @@ function MyApp({ Component, pageProps }: AppProps) {
                 return [...existing, ...incoming];
               },
             },
+            userPosts: {
+              ...offsetLimitPagination(),
+
+              merge(existing = [], incoming: any[]) {
+                return [...existing, ...incoming];
+              },
+            },
           },
         },
       },
