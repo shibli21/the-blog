@@ -9,16 +9,16 @@ const breakpoints = createBreakpoints({
 });
 
 const brandColorScheme = {
-  50: "#eaf3fe",
-  100: "#ccd9e7",
-  200: "#adbfd2",
-  300: "#8da6be",
-  400: "#6e8cab",
-  500: "#557392",
-  600: "#415972",
-  700: "#2d4052",
-  800: "#192633",
-  900: "#010e16",
+  50: "#ecf4f9",
+  100: "#cbdce7",
+  200: "#a8c5d8",
+  300: "#85afca",
+  400: "#6498bc",
+  500: "#4c7ea2",
+  600: "#3c627e",
+  700: "#2c465a",
+  800: "#1a2935",
+  900: "#060e13",
 };
 
 const secondaryColorScheme = {

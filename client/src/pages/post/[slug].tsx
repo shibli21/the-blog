@@ -1,7 +1,10 @@
 import { DeleteIcon } from "@chakra-ui/icons";
 import {
+  Alert,
+  AlertIcon,
   Box,
   Button,
+  Center,
   chakra,
   Divider,
   Flex,
@@ -10,6 +13,7 @@ import {
   HStack,
   Input,
   InputGroup,
+  Spinner,
   Text,
   useColorModeValue,
   useToast,
@@ -35,14 +39,18 @@ interface Props {}
 
 const Post = ({}: Props) => {
   const router = useRouter();
-  const { data: MeData } = useMeQuery();
-
-  const [deleteComment] = useDeleteCommentMutation();
-  const [commentOnPost] = useCommentOnPostMutationMutation();
-
   const slug = typeof router.query.slug === "string" ? router.query.slug : -1;
 
-  const { data } = usePostQuery({
+  const {
+    handleSubmit,
+    register,
+    reset,
+    formState: { errors },
+  } = useForm();
+  const toast = useToast();
+
+  const { data: MeData } = useMeQuery();
+  const { data, loading } = usePostQuery({
     variables: {
       getPostInput: {
         identifier: router.query.identifier as string,
@@ -50,6 +58,7 @@ const Post = ({}: Props) => {
       },
     },
   });
+
   const { data: commentsData } = useGetCommentsQuery({
     variables: {
       getCommentsInput: {
@@ -59,13 +68,8 @@ const Post = ({}: Props) => {
     },
   });
 
-  const {
-    handleSubmit,
-    register,
-    reset,
-    formState: { errors },
-  } = useForm();
-  const toast = useToast();
+  const [deleteComment] = useDeleteCommentMutation();
+  const [commentOnPost] = useCommentOnPostMutationMutation();
 
   const onSubmit = async (data: any) => {
     if (MeData?.me?.email) {
@@ -103,13 +107,34 @@ const Post = ({}: Props) => {
       reset();
     }
   };
+
+  if (loading) {
+    return (
+      <Layout>
+        <Center mt={10}>
+          <Spinner size="xl" />
+        </Center>
+      </Layout>
+    );
+  }
   if (!data?.getPost.post) {
-    return <Box>No Post</Box>;
+    return (
+      <Layout>
+        <Alert status="error" variant="subtle">
+          <AlertIcon />
+          Post not found
+        </Alert>
+      </Layout>
+    );
   }
 
   return (
     <Layout>
-      <Box border="1px solid" p={5} bg={useColorModeValue("white", "gray.800")}>
+      <Box
+        border="1px solid"
+        p={5}
+        bg={useColorModeValue("white", "brand.900")}
+      >
         <Flex justifyContent="space-between" alignItems="flex-start">
           <HStack alignItems="center">
             <Box
@@ -197,13 +222,13 @@ const Post = ({}: Props) => {
                 {errors.body && errors.body.message}
               </FormErrorMessage>
             </FormControl>
-            <Button type="submit" variant="solid" colorScheme="green">
+            <Button type="submit" variant="solid" colorScheme="brand">
               comment
             </Button>
           </HStack>
         </chakra.form>
         {commentsData?.getComments.map(c => (
-          <VStack alignItems="flex-start" py={2}>
+          <VStack alignItems="flex-start" py={2} key={c.id}>
             <Divider mb={2} />
             <Flex w="100%" justifyContent="space-between">
               <Box bgGradient="linear(to-l, #7928CA,#FF0080)" bgClip="text">

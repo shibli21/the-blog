@@ -45,7 +45,7 @@ const PostCard = ({
   comments,
 }: Props) => {
   return (
-    <Box border="1px solid" p={5} bg={useColorModeValue("white", "gray.800")}>
+    <Box border="1px solid" p={5} bg={useColorModeValue("white", "brand.900")}>
       <Flex justifyContent="space-between" alignItems="flex-start">
         <HStack alignItems="center">
           <Box
