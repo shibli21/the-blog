@@ -71,7 +71,7 @@ const EditPost = ({}: Props) => {
   }
 
   return (
-    <Layout>
+    <Layout pageTitle={`The Blog | Edit Post | ${data?.getPost.post.title}`}>
       <Box bg={useColorModeValue("gray.50", "inherit")} minH="100vh" py="12">
         <Box>
           <DividerWithText my={10}>

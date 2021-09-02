@@ -1,6 +1,5 @@
 import { EmailIcon } from "@chakra-ui/icons";
 import {
-  Box,
   Button,
   Center,
   Flex,
@@ -18,7 +17,7 @@ import { useMeQuery, useUserPostsQuery } from "../../generated/graphql";
 
 interface Props {}
 
-const Profile = (props: Props) => {
+const Profile = ({}: Props) => {
   const { data } = useMeQuery();
   const {
     data: userPosts,
@@ -34,7 +33,7 @@ const Profile = (props: Props) => {
   });
 
   return (
-    <Layout>
+    <Layout pageTitle={`The Blog | ${data?.me?.username}`}>
       <VStack alignItems="center" justifyContent="center">
         <Text
           fontSize="3xl"

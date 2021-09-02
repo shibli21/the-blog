@@ -20,28 +20,27 @@ const Nav: FC<Props> = ({}) => {
   } else if (!data?.me) {
     body = (
       <HStack>
-        <Button letterSpacing="wider" colorScheme="green">
-          <Nextlink href="/login">login</Nextlink>
+        <Button colorScheme="green">
+          <Nextlink href="/login">log in</Nextlink>
         </Button>
-        <Button letterSpacing="wider" colorScheme="purple">
-          <Nextlink href="/register">register</Nextlink>
+        <Button colorScheme="purple">
+          <Nextlink href="/register">sign up</Nextlink>
         </Button>
       </HStack>
     );
   } else {
     body = (
       <HStack>
-        <Button letterSpacing="wider" colorScheme="purple">
+        <Button colorScheme="purple">
           <Nextlink href="/create-post">create post</Nextlink>
         </Button>
 
-        <Button letterSpacing="wider" colorScheme="green">
+        <Button colorScheme="green">
           <Nextlink href={`/profile/${data.me.username}`}>
             {data?.me?.username}
           </Nextlink>
         </Button>
         <Button
-          letterSpacing="wider"
           isLoading={logoutLoading}
           colorScheme="red"
           onClick={async () => {

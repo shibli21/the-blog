@@ -5,17 +5,16 @@ import {
   Flex,
   HStack,
   Link,
-  Stack,
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
 import { DateTime } from "luxon";
 import NextLink from "next/link";
 import React from "react";
-import { Maybe } from "../generated/graphql";
 import { BiCommentDetail } from "react-icons/bi";
-import VoteStatus from "./VoteStatus";
+import { Maybe } from "../generated/graphql";
 import EditDeleteButtons from "./EditDeleteButtons";
+import VoteStatus from "./VoteStatus";
 
 interface Props {
   body: string;
@@ -53,7 +52,17 @@ const PostCard = ({
             w="40px"
             h="40px"
             borderRadius="50%"
-          />
+          >
+            {/* <Center
+              fontSize="25px"
+              color="white"
+              alignItems="center"
+              fontFamily="Nexa Bold"
+              h="100%"
+            >
+              H
+            </Center> */}
+          </Box>
           <Box>
             <Text bgGradient="linear(to-l, #7928CA,#FF0080)" bgClip="text">
               {username}

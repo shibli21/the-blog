@@ -5,7 +5,6 @@ import {
   FormControl,
   FormErrorMessage,
   FormLabel,
-  Heading,
   Input,
   Stack,
   Text,
@@ -23,16 +22,15 @@ import { useCreatePostMutation } from "../generated/graphql";
 
 interface Props {}
 
-const CreatePost = (props: Props) => {
+const CreatePost = ({}: Props) => {
   const router = useRouter();
   const {
     handleSubmit,
     register,
-    setError,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm();
 
-  const [createPost, { loading }] = useCreatePostMutation();
+  const [createPost] = useCreatePostMutation();
 
   const onSubmit = async (data: any) => {
     const response = await createPost({
@@ -51,7 +49,7 @@ const CreatePost = (props: Props) => {
   };
 
   return (
-    <Layout>
+    <Layout pageTitle={`The Blog | Write a new post`}>
       <Box
         bg={useColorModeValue("gray.50", "inherit")}
         minH="100vh"

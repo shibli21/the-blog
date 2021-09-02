@@ -9,8 +9,8 @@ import {
   Input,
   Stack,
   Text,
-  useColorModeValue,
 } from "@chakra-ui/react";
+import Head from "next/head";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
@@ -22,15 +22,15 @@ import { MeDocument, useRegisterMutation } from "../generated/graphql";
 
 interface Props {}
 
-const Register = (props: Props) => {
-  const [registerUser, { loading }] = useRegisterMutation();
+const Register = ({}: Props) => {
+  const [registerUser] = useRegisterMutation();
 
   const router = useRouter();
   const {
     handleSubmit,
     register,
     setError,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm();
 
   const onSubmit = async (data: any) => {
@@ -62,89 +62,100 @@ const Register = (props: Props) => {
   };
 
   return (
-    <Box minH="100vh" py="12" px={{ base: "4", lg: "8" }}>
-      <Box maxW="md" mx="auto">
-        <Logo
-          textAlign="center"
-          fontSize="60px"
-          h="8"
-          mb={{ base: "20", md: "20" }}
-        />
-        <Heading textAlign="center" size="xl" fontWeight="extrabold">
-          Sign up to your account
-        </Heading>
-        <HStack mt="4" mb="8" justifyContent="center" fontWeight="medium">
-          <Text as="span">Already have an account?</Text>
-          <NextLink href="/login">
-            <Link href="#"> Sign in</Link>
-          </NextLink>
-        </HStack>
-        <Card border="1px solid">
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <Stack spacing="6">
-              <FormControl isInvalid={errors.username}>
-                <FormLabel htmlFor="username">Name</FormLabel>
-                <Input
-                  borderRadius="0"
-                  id="username"
-                  placeholder="username"
-                  {...register("username", {
-                    required: "This is required",
-                    minLength: {
-                      value: 4,
-                      message: "Minimum length should be 4",
-                    },
-                  })}
-                />
-                <FormErrorMessage>
-                  {errors.username && errors.username.message}
-                </FormErrorMessage>
-              </FormControl>
-              <FormControl isInvalid={errors.email}>
-                <FormLabel htmlFor="email">Email</FormLabel>
-                <Input
-                  borderRadius="0"
-                  id="email"
-                  placeholder="email"
-                  {...register("email", {
-                    required: "This is required",
-                    minLength: {
-                      value: 4,
-                      message: "Minimum length should be 4",
-                    },
-                  })}
-                />
-                <FormErrorMessage>
-                  {errors.email && errors.email.message}
-                </FormErrorMessage>
-              </FormControl>
-              <FormControl isInvalid={errors.password}>
-                <FormLabel htmlFor="name">Password</FormLabel>
-                <Input
-                  borderRadius="0"
-                  id="password"
-                  type="password"
-                  placeholder="password"
-                  {...register("password", {
-                    required: "This is required",
-                    minLength: {
-                      value: 6,
-                      message: "Minimum length should be 6",
-                    },
-                  })}
-                />
-                <FormErrorMessage>
-                  {errors.password && errors.password.message}
-                </FormErrorMessage>
-              </FormControl>
-              <Button type="submit" colorScheme="blue" size="lg" fontSize="md">
-                Sign up
-              </Button>
-            </Stack>
-          </form>
-        </Card>
+    <>
+      <Head>
+        <title>The Blog | Register</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
+      <Box minH="100vh" py="12" px={{ base: "4", lg: "8" }}>
+        <Box maxW="md" mx="auto">
+          <Logo
+            textAlign="center"
+            fontSize="60px"
+            h="8"
+            mb={{ base: "20", md: "20" }}
+          />
+          <Heading textAlign="center" size="xl" fontWeight="extrabold">
+            Sign up to your account
+          </Heading>
+          <HStack mt="4" mb="8" justifyContent="center" fontWeight="medium">
+            <Text as="span">Already have an account?</Text>
+            <NextLink href="/login">
+              <Link href="#"> Sign in</Link>
+            </NextLink>
+          </HStack>
+          <Card border="1px solid">
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <Stack spacing="6">
+                <FormControl isInvalid={errors.username}>
+                  <FormLabel htmlFor="username">Name</FormLabel>
+                  <Input
+                    borderRadius="0"
+                    id="username"
+                    placeholder="username"
+                    {...register("username", {
+                      required: "This is required",
+                      minLength: {
+                        value: 4,
+                        message: "Minimum length should be 4",
+                      },
+                    })}
+                  />
+                  <FormErrorMessage>
+                    {errors.username && errors.username.message}
+                  </FormErrorMessage>
+                </FormControl>
+                <FormControl isInvalid={errors.email}>
+                  <FormLabel htmlFor="email">Email</FormLabel>
+                  <Input
+                    borderRadius="0"
+                    id="email"
+                    placeholder="email"
+                    {...register("email", {
+                      required: "This is required",
+                      minLength: {
+                        value: 4,
+                        message: "Minimum length should be 4",
+                      },
+                    })}
+                  />
+                  <FormErrorMessage>
+                    {errors.email && errors.email.message}
+                  </FormErrorMessage>
+                </FormControl>
+                <FormControl isInvalid={errors.password}>
+                  <FormLabel htmlFor="name">Password</FormLabel>
+                  <Input
+                    borderRadius="0"
+                    id="password"
+                    type="password"
+                    placeholder="password"
+                    {...register("password", {
+                      required: "This is required",
+                      minLength: {
+                        value: 6,
+                        message: "Minimum length should be 6",
+                      },
+                    })}
+                  />
+                  <FormErrorMessage>
+                    {errors.password && errors.password.message}
+                  </FormErrorMessage>
+                </FormControl>
+                <Button
+                  type="submit"
+                  colorScheme="blue"
+                  size="lg"
+                  fontSize="md"
+                >
+                  Sign up
+                </Button>
+              </Stack>
+            </form>
+          </Card>
+        </Box>
       </Box>
-    </Box>
+    </>
   );
 };
 

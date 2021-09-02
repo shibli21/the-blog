@@ -33,9 +33,21 @@ const secondaryColorScheme = {
   800: "#2d1638",
   900: "#130518",
 };
+const blackColorScheme = {
+  50: "#f2f2f2",
+  100: "#d9d9d9",
+  200: "#bfbfbf",
+  300: "#a6a6a6",
+  400: "#8c8c8c",
+  500: "#737373",
+  600: "#595959",
+  700: "#404040",
+  800: "#262626",
+  900: "#0d0d0d",
+};
 
-const primary = brandColorScheme[400];
-const secondary = secondaryColorScheme[400];
+const primary = brandColorScheme[500];
+const secondary = secondaryColorScheme[500];
 
 // Text
 const textPrimary = "#222222";
@@ -86,6 +98,7 @@ const theme = extendTheme({
   colors: {
     brand: brandColorScheme,
     brandSecondary: secondaryColorScheme,
+    b: blackColorScheme,
     primary,
     secondary,
     text: {

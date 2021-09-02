@@ -4,7 +4,7 @@ import PostCard from "../components/PostCard";
 import { usePostsQuery } from "../generated/graphql";
 
 const Index = () => {
-  const { data, fetchMore, loading, called } = usePostsQuery({
+  const { data, fetchMore, loading } = usePostsQuery({
     variables: {
       postsInput: {
         offset: 0,
@@ -14,7 +14,7 @@ const Index = () => {
   });
 
   return (
-    <Layout>
+    <Layout pageTitle="The Blog">
       {loading ? (
         <Center mt={10}>
           <Spinner size="xl" />

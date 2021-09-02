@@ -129,7 +129,7 @@ const Post = ({}: Props) => {
   }
 
   return (
-    <Layout>
+    <Layout pageTitle={`The Blog | ${data?.getPost.post.title}`}>
       <Box
         border="1px solid"
         p={5}

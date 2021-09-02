@@ -1,4 +1,4 @@
-import { Container, Heading } from "@chakra-ui/layout";
+import { Container } from "@chakra-ui/layout";
 import { Text } from "@chakra-ui/react";
 import React, { FC } from "react";
 import { DividerWithText } from "./DividerWithText";

@@ -9,7 +9,7 @@ const Logo: FC<Props> = ({ ...props }) => {
   return (
     <Link href="/">
       <Heading cursor="pointer" {...(props as HeadingProps)}>
-        The Blog{" "}
+        the blog{" "}
         <chakra.span color="red.300" fontSize="6xl" lineHeight="0">
           .
         </chakra.span>

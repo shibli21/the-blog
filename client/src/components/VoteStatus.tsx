@@ -1,14 +1,12 @@
-import { Box, HStack, Text } from "@chakra-ui/react";
+import { Box, HStack, Text, useToast } from "@chakra-ui/react";
 import React from "react";
 import { AiFillHeart } from "react-icons/ai";
 import {
   Maybe,
   PostDocument,
-  PostsDocument,
   useMeQuery,
   useVoteOnPostMutation,
 } from "../generated/graphql";
-import { useToast } from "@chakra-ui/react";
 
 interface Props {
   slug: string;
