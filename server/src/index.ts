@@ -1,3 +1,7 @@
+import { VoteResolver } from './resolvers/vote';
+import { CommentResolver } from './resolvers/comment';
+import { UserResolver } from './resolvers/user';
+import { PostResolver } from './resolvers/post';
 import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
 import { ApolloServer } from "apollo-server-express";
 import cookieParser from "cookie-parser";
@@ -9,11 +13,27 @@ import "reflect-metadata";
 import { buildSchema } from "type-graphql";
 import { createConnection } from "typeorm";
 import { MyContext } from "./types/MyContext";
+import { Post } from './entities/post';
+import { Vote } from './entities/Vote';
+import { User } from './entities/user';
+import { Comment } from './entities/comment';
 
 config();
 
 const main = async () => {
-  await createConnection();
+  await createConnection({
+    type: "postgres",
+    host: "localhost",
+    port: 5432,
+    password: "root",
+    username: "postgres",
+    database: "the blog",
+    synchronize: true,
+    logging: true,
+    entities: [
+      Post, Comment, Vote, User
+    ]
+  });
 
   const app = express();
 
@@ -32,7 +52,7 @@ const main = async () => {
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [__dirname + "/resolvers/*.ts"],
+      resolvers: [PostResolver, UserResolver, CommentResolver, VoteResolver],
       validate: false,
     }),
     context: ({ req, res }): MyContext => ({
