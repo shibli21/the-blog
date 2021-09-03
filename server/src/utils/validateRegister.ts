@@ -1,4 +1,4 @@
-import { UserInputType } from "./UserInput";
+import { UserInputType } from "../utils/userInput";
 
 export const validateRegister = (input: UserInputType) => {
   if (input.username.includes("@")) {
