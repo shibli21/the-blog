@@ -22,14 +22,10 @@ config();
 
 const main = async () => {
   await createConnection({
+    url: process.env.DATABASE_URL,
     type: "postgres",
-    host: "localhost",
-    port: 5432,
-    password: "root",
-    username: "postgres",
-    database: "the blog",
-    synchronize: true,
     logging: true,
+    synchronize: true,
     entities: [
       Post, Comment, Vote, User
     ]
