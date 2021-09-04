@@ -7,10 +7,7 @@ import theme from "../theme/theme";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const client = new ApolloClient({
-    uri:
-      process.env.NODE_ENV === "development"
-        ? "http://localhost:4000/graphql"
-        : process.env.SERVER_URL,
+    uri: process.env.NEXT_PUBLIC_API_URL,
     credentials: "include",
     cache: new InMemoryCache({
       typePolicies: {
