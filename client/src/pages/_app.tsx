@@ -11,7 +11,7 @@ function MyApp({ Component, pageProps }: AppProps, ctx: NextPageContext) {
     uri: process.env.NEXT_PUBLIC_API_URL,
     credentials: "include",
     headers: {
-      cookie:
+      cookies:
         (typeof window === "undefined"
           ? ctx?.req?.headers.cookie
           : undefined) || "",
