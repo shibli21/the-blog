@@ -1,12 +1,16 @@
-import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
+import {
+  ApolloClient,
+  ApolloProvider,
+  Context,
+  InMemoryCache,
+} from "@apollo/client";
 import { offsetLimitPagination } from "@apollo/client/utilities";
 import { ChakraProvider } from "@chakra-ui/react";
-import { NextPageContext } from "next";
 import { AppProps } from "next/app";
 import Fonts from "../theme/Fonts";
 import theme from "../theme/theme";
 
-function MyApp({ Component, pageProps }: AppProps, ctx: NextPageContext) {
+function MyApp({ Component, pageProps }: AppProps, ctx: Context) {
   const client = new ApolloClient({
     uri: process.env.NEXT_PUBLIC_API_URL,
     credentials: "include",
