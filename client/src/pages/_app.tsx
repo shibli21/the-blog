@@ -1,25 +1,14 @@
-import {
-  ApolloClient,
-  ApolloProvider,
-  Context,
-  InMemoryCache,
-} from "@apollo/client";
+import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import { offsetLimitPagination } from "@apollo/client/utilities";
 import { ChakraProvider } from "@chakra-ui/react";
 import { AppProps } from "next/app";
 import Fonts from "../theme/Fonts";
 import theme from "../theme/theme";
 
-function MyApp({ Component, pageProps }: AppProps, ctx: Context) {
+function MyApp({ Component, pageProps }: AppProps) {
   const client = new ApolloClient({
     uri: process.env.NEXT_PUBLIC_API_URL,
     credentials: "include",
-    headers: {
-      cookies:
-        (typeof window === "undefined"
-          ? ctx?.req?.headers.cookie
-          : undefined) || "",
-    },
     cache: new InMemoryCache({
       typePolicies: {
         Query: {
