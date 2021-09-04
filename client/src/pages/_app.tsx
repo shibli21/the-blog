@@ -9,7 +9,7 @@ import theme from "../theme/theme";
 function MyApp({ Component, pageProps }: AppProps, ctx: NextPageContext) {
   const client = new ApolloClient({
     uri: process.env.NEXT_PUBLIC_API_URL,
-    credentials: "same-origin",
+    credentials: "include",
     headers: {
       cookie:
         (typeof window === "undefined"
