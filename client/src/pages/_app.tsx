@@ -9,7 +9,6 @@ function MyApp({ Component, pageProps }: AppProps) {
   const client = new ApolloClient({
     uri: process.env.NEXT_PUBLIC_API_URL,
     credentials: "include",
-    ssrMode: true,
     cache: new InMemoryCache({
       typePolicies: {
         Query: {
