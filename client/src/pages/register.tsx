@@ -81,7 +81,9 @@ const Register = ({}: Props) => {
           <HStack mt="4" mb="8" justifyContent="center" fontWeight="medium">
             <Text as="span">Already have an account?</Text>
             <NextLink href="/login">
-              <Link href="#"> Sign in</Link>
+              <Text cursor="pointer" color="blue.500">
+                Sign in
+              </Text>
             </NextLink>
           </HStack>
           <Card border="1px solid">

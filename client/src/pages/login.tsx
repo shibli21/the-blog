@@ -78,7 +78,9 @@ const login = ({}: Props) => {
           <HStack mt="4" mb="8" justifyContent="center" fontWeight="medium">
             <Text as="span">Don&apos;t have an account?</Text>
             <NextLink href="/register">
-              <Link> Create an account</Link>
+              <Text cursor="pointer" color="blue.500">
+                Create an account
+              </Text>
             </NextLink>
           </HStack>
           <Card border="1px solid">
