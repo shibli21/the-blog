@@ -16,7 +16,6 @@ import { useRouter } from "next/router";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { Card } from "../components/Card";
-import { Link } from "../components/Link";
 import Logo from "../components/Logo";
 import { MeDocument, useLoginMutation } from "../generated/graphql";
 
