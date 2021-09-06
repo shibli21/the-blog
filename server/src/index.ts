@@ -26,6 +26,7 @@ const main = async () => {
     type: "postgres",
     logging: true,
     synchronize: true,
+    ssl: process.env.NODE_ENV === 'development' ? { rejectUnauthorized: false } : false,
     entities: [
       Post, Comment, Vote, User
     ]
@@ -33,7 +34,7 @@ const main = async () => {
 
   const app = express();
 
-  app.use(cors({ origin: ["https://studio.apollographql.com", "http://localhost:3000"], credentials: true, }));
+  app.use(cors({ origin: process.env.CORS_ORIGIN, credentials: true }));
   app.use(cookieParser());
 
   // ** middleware for getting the userId from cookies
@@ -47,6 +48,7 @@ const main = async () => {
   });
 
   const apolloServer = new ApolloServer({
+    introspection: true,
     schema: await buildSchema({
       resolvers: [PostResolver, UserResolver, CommentResolver, VoteResolver],
       validate: false,

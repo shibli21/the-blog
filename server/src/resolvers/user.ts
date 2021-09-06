@@ -66,7 +66,9 @@ export class UserResolver {
 
       const token = jwt.sign({ userId: user?.id }, `${process.env.JWT_SECRET}`);
       res.cookie("token", token, {
-        httpOnly: true,
+        domain: process.env.CORS_URL,
+        sameSite: "none",
+        secure: true,
         maxAge: 100000000,
       });
     } catch (error) {
@@ -111,7 +113,9 @@ export class UserResolver {
 
     const token = jwt.sign({ userId: user?.id }, `${process.env.JWT_SECRET}`);
     res.cookie("token", token, {
-      httpOnly: true,
+      domain: process.env.CORS_URL,
+      sameSite: "none",
+      secure: true,
       maxAge: 100000000000,
     });
 
