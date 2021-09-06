@@ -18,10 +18,11 @@ import { useForm } from "react-hook-form";
 import { Card } from "../components/Card";
 import Logo from "../components/Logo";
 import { MeDocument, useLoginMutation } from "../generated/graphql";
+import withApollo from "../lib/withApollo";
 
 interface Props {}
 
-const login = ({}: Props) => {
+const Login = ({}: Props) => {
   const [login] = useLoginMutation();
 
   const router = useRouter();
@@ -140,4 +141,4 @@ const login = ({}: Props) => {
   );
 };
 
-export default login;
+export default withApollo(Login);

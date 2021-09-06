@@ -35,6 +35,7 @@ import {
   useMeQuery,
   usePostQuery,
 } from "../../generated/graphql";
+import withApollo from "../../lib/withApollo";
 interface Props {}
 
 const Post = ({}: Props) => {
@@ -275,4 +276,4 @@ const Post = ({}: Props) => {
   );
 };
 
-export default Post;
+export default withApollo(Post);

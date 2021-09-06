@@ -14,6 +14,7 @@ import { DividerWithText } from "../../components/DividerWithText";
 import Layout from "../../components/layout";
 import PostCard from "../../components/PostCard";
 import { useMeQuery, useUserPostsQuery } from "../../generated/graphql";
+import withApollo from "../../lib/withApollo";
 
 interface Props {}
 
@@ -96,4 +97,4 @@ const Profile = ({}: Props) => {
   );
 };
 
-export default Profile;
+export default withApollo(Profile);

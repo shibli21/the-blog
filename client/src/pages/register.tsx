@@ -18,6 +18,7 @@ import { useForm } from "react-hook-form";
 import { Card } from "../components/Card";
 import Logo from "../components/Logo";
 import { MeDocument, useRegisterMutation } from "../generated/graphql";
+import withApollo from "../lib/withApollo";
 
 interface Props {}
 
@@ -160,4 +161,4 @@ const Register = ({}: Props) => {
   );
 };
 
-export default Register;
+export default withApollo(Register);

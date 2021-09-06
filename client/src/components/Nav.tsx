@@ -14,7 +14,16 @@ const Nav: FC<Props> = ({}) => {
   const { data, loading } = useMeQuery();
   const [logout, { loading: logoutLoading }] = useLogoutMutation();
 
-  let body = null;
+  let body = (
+    <HStack>
+      <Button colorScheme="green">
+        <Nextlink href="/login">log in</Nextlink>
+      </Button>
+      <Button colorScheme="purple">
+        <Nextlink href="/register">sign up</Nextlink>
+      </Button>
+    </HStack>
+  );
 
   if (loading) {
   } else if (!data?.me) {
@@ -32,7 +41,7 @@ const Nav: FC<Props> = ({}) => {
     body = (
       <HStack>
         <Button colorScheme="purple">
-          <Nextlink href="/create-post">create post</Nextlink>
+          <Nextlink href="/create-post">create new</Nextlink>
         </Button>
 
         <Button colorScheme="green">
@@ -41,12 +50,12 @@ const Nav: FC<Props> = ({}) => {
           </Nextlink>
         </Button>
         <Button
-          isLoading={logoutLoading}
           colorScheme="red"
           onClick={async () => {
             await logout();
-            router.push("/");
+            router.reload();
           }}
+          isLoading={logoutLoading}
         >
           logout
         </Button>

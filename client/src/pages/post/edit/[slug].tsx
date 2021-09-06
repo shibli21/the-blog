@@ -22,6 +22,7 @@ import {
   usePostQuery,
   useUpdatePostMutation,
 } from "../../../generated/graphql";
+import withApollo from "../../../lib/withApollo";
 
 interface Props {}
 
@@ -123,4 +124,4 @@ const EditPost = ({}: Props) => {
   );
 };
 
-export default EditPost;
+export default withApollo(EditPost);

@@ -18,7 +18,8 @@ import { useForm } from "react-hook-form";
 import { Card } from "../components/Card";
 import { DividerWithText } from "../components/DividerWithText";
 import Layout from "../components/layout";
-import { useCreatePostMutation } from "../generated/graphql";
+import { PostsDocument, useCreatePostMutation } from "../generated/graphql";
+import withApollo from "../lib/withApollo";
 
 interface Props {}
 
@@ -30,7 +31,7 @@ const CreatePost = ({}: Props) => {
     formState: { errors },
   } = useForm();
 
-  const [createPost] = useCreatePostMutation();
+  const [createPost, { loading }] = useCreatePostMutation();
 
   const onSubmit = async (data: any) => {
     const response = await createPost({
@@ -40,6 +41,17 @@ const CreatePost = ({}: Props) => {
           title: data.title,
         },
       },
+      refetchQueries: [
+        {
+          query: PostsDocument,
+          variables: {
+            postsInput: {
+              offset: 0,
+              limit: 2,
+            },
+          },
+        },
+      ],
     });
 
     if (response.data?.createPost) {
@@ -92,7 +104,12 @@ const CreatePost = ({}: Props) => {
                   />
                 </VStack>
                 <Flex justifyContent="flex-end" mt={4}>
-                  <Button type="submit" colorScheme="blue" fontSize="md">
+                  <Button
+                    type="submit"
+                    colorScheme="blue"
+                    fontSize="md"
+                    isLoading={loading}
+                  >
                     create post
                   </Button>
                 </Flex>
@@ -105,4 +122,4 @@ const CreatePost = ({}: Props) => {
   );
 };
 
-export default CreatePost;
+export default withApollo(CreatePost);

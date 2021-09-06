@@ -2,6 +2,7 @@ import { Button, Center, Flex, Spinner, Stack } from "@chakra-ui/react";
 import Layout from "../components/layout";
 import PostCard from "../components/PostCard";
 import { usePostsQuery } from "../generated/graphql";
+import withApollo from "../lib/withApollo";
 
 const Index = () => {
   const { data, fetchMore, loading } = usePostsQuery({
@@ -61,4 +62,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default withApollo(Index);
