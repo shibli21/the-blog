@@ -3,13 +3,17 @@ import { offsetLimitPagination } from "@apollo/client/utilities";
 import withApollo from "next-with-apollo";
 
 export default withApollo(
-  ({ initialState }) => {
+  ({ initialState, ctx }) => {
     return new ApolloClient({
       uri: process.env.NEXT_PUBLIC_API_URL,
       credentials: "include",
       ssrMode: typeof window === "undefined",
       headers: {
         "Access-Control-Allow-Origin": "*",
+        cookie:
+          (typeof window === "undefined"
+            ? ctx?.req?.headers.cookie
+            : undefined) || "",
       },
       cache: new InMemoryCache({
         typePolicies: {
