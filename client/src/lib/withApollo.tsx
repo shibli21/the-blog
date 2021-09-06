@@ -10,7 +10,7 @@ export default withApollo(
       ssrMode: typeof window === "undefined",
       headers: {
         "Access-Control-Allow-Origin": "*",
-        cookies:
+        Cookie:
           (typeof window === "undefined"
             ? ctx?.req?.headers.cookie
             : undefined) || "",
