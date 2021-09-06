@@ -8,6 +8,9 @@ export default withApollo(
       uri: process.env.NEXT_PUBLIC_API_URL,
       credentials: "include",
       ssrMode: typeof window === "undefined",
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+      },
       cache: new InMemoryCache({
         typePolicies: {
           Query: {
