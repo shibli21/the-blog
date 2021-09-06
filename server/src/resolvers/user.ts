@@ -124,7 +124,11 @@ export class UserResolver {
 
   @Mutation(() => Boolean)
   logout(@Ctx() { res }: MyContext) {
-    res.clearCookie("token");
+    res.clearCookie("token", {
+      domain: process.env.CORS_URL,
+      sameSite: "none",
+      secure: true,
+    });
     return true;
   }
 }
